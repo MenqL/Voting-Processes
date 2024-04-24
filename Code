@@ -1,0 +1,92 @@
+import datetime
+
+class VotingProcesses:
+    def __init__(self, candidate, end_date):
+        self.candidate = candidate
+        self.quantity = 0  # Initialize quantity as 0
+        self.start_date = datetime.datetime.now()
+        self.end_date = end_date
+        self.voters = set() # Track voters who have voted
+
+    def add_voting(self, voter_name):
+        current_date = datetime.datetime.now()
+        if current_date <= self.end_date and voter_name not in self.voters:
+            self.quantity += 1
+            self.voters.add(voter_name) # Add voter to set of voters
+            return True
+        elif current_date > self.end_date:
+            print("Voting is closed.") # Inform the user that voting is closed
+            return False
+        else:
+            print("You have already voted.") # Inform the user that they have already voted
+            return False
+
+    def update_voting(self, candidate, quantity):
+        if candidate:
+            self.candidate = candidate
+        if quantity is not None:
+            self.quantity = quantity
+
+    def display_candidate_details(self):
+        print("Candidate: ", self.candidate)
+        print("Quantity: ", self.quantity)
+
+    def is_voting_open(self):
+        current_date = datetime.datetime.now()
+        return current_date <= self.end_date
+
+def main():
+    # Create instances for each candidate
+    end_date = datetime.datetime(2024, 4, 30)  # Example end date (April 30, 2024)
+    Vote1 = VotingProcesses("John Chen", end_date)
+    Vote2 = VotingProcesses("May Chen", end_date)
+
+    while True:
+        print("Welcome to the Voting System!!!")
+        print("1. Vote for John Chen")
+        print("2. Vote for May Chen")
+        print("3. Candidate details for John Chen")
+        print("4. Candidate details for May Chen")
+        print("5. Exit")
+
+        choice = input("Your Choice: ")
+
+        if choice == "1":
+            voter_name = input("Enter your name: ")
+            if Vote1.add_voting(voter_name):
+                print("Thank you for voting for John Chen!")
+            else:
+                print("Voting has closed.")
+
+        elif choice == "2":
+            voter_name = input("Enter your name: ")
+            if Vote2.add_voting(voter_name):
+                print("Thank you for voting for May Chen!")
+            else:
+                print("Voting has closed.")
+
+        elif choice == "3":
+            print("Candidate details for John Chen:")
+            Vote1.display_candidate_details()
+            if Vote1.is_voting_open():
+                print("You can vote now")
+            else:
+                print("Sorry, it is passed already. You can't vote anymore.")
+
+        elif choice == "4":
+            print("Candidate details for May Chen:")
+            Vote2.display_candidate_details()
+            if Vote2.is_voting_open():
+                print("You can vote now")
+            else:
+                print("Sorry, it is passed already. You can't vote anymore.")
+
+        elif choice == "5":
+            print("Exit")
+            break
+
+        else:
+            print("Please choose again.")
+
+if __name__ == "__main__":
+    main()
